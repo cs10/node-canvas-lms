@@ -1,7 +1,7 @@
 {
   "name": "canvas-lms-api",
   "description": "Promise-driven accessor for the Canvas LMS API",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "keywords": [
     "api",
     "canvas"
