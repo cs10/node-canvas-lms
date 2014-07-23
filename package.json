@@ -1,14 +1,14 @@
 {
-  "name": "canvas-api",
+  "name": "canvas-lms-api",
   "description": "Promise-driven accessor for the Canvas LMS API",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "keywords": [
     "api",
     "canvas"
   ],
-  "homepage": "https://github.com/beardon/canvas-api",
+  "homepage": "https://github.com/beardon/canvas-lms-api",
   "bugs": {
-    "url": "https://github.com/beardon/canvas-api/issues",
+    "url": "https://github.com/beardon/canvas-lms-api/issues",
     "email": "aaron.bean@beardon.com"
   },
   "author": {
