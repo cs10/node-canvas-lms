@@ -1,20 +1,24 @@
 {
   "name": "node-canvas-lms",
-  "description": "Promise-driven accessor for the Canvas LMS API",
-  "version": "0.0.3",
+  "description": "A simple callback based Canvas LMS API",
+  "version": "0.0.1",
   "keywords": [
     "api",
     "canvas"
   ],
-  "homepage": "https://github.com/beardon/canvas-lms-api",
+  "homepage": "https://github.com/cycomachead/node-canvaslms",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cs10/node-canvaslms.git"
+  },
   "bugs": {
-    "url": "https://github.com/beardon/canvas-lms-api/issues",
-    "email": "aaron.bean@beardon.com"
+    "url": "https://github.com/cycomachead/node-canvaslms/issues",
+    "email": "cycomachead@gmail.com"
   },
   "author": {
-    "name": "Aaron Bean",
-    "email": "aaron.bean@beardon.com",
-    "url": "https://github.com/aaronbean"
+    "name": "Michael Ball",
+    "email": "cycomachead@gmail.com",
+    "url": "https://github.com/cycomachead"
   },
   "main": "./lib/canvas",
   "dependencies": {
