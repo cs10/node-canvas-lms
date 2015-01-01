@@ -79,11 +79,15 @@ function getLabsCheckOffs() {
 //     console.log(body);
 // })
 
-thing = cs10.get('/courses/1268501/assignments/5359333/submissions/',
-'', function() {return;});
+// thing = cs10.get('/courses/1268501/assignments/5359333/submissions/',
+// '', function() {return;});
+//
+// console.log('thing')
+// console.log(thing);
+//
+// thing = cs10.get('/courses/1268501/assignments/', '', function() {return;});
 
-console.log('thing')
-console.log(thing);
-
-thing = cs10.get('/courses/1268501/assignments/', '', function() {return;});
-
+console.log(process.env.CANVAS_TOKEN);
+cs10.getID('sis_user_id', 22942141, function(body) {
+        console.log(body);
+});
