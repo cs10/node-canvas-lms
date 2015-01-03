@@ -6,13 +6,13 @@
     "api",
     "canvas"
   ],
-  "homepage": "https://github.com/cycomachead/node-canvaslms",
+  "homepage": "https://github.com/cycomachead/node-canvas-lms",
   "repository": {
     "type": "git",
-    "url": "https://github.com/cs10/node-canvaslms.git"
+    "url": "https://github.com/cs10/node-canvas-lms.git"
   },
   "bugs": {
-    "url": "https://github.com/cycomachead/node-canvaslms/issues",
+    "url": "https://github.com/cycomachead/node-canvas-lms/issues",
     "email": "cycomachead@gmail.com"
   },
   "author": {
@@ -20,7 +20,7 @@
     "email": "cycomachead@gmail.com",
     "url": "https://github.com/cycomachead"
   },
-  "main": "./lib/canvas",
+  "main": "./canvas",
   "dependencies": {
     "request": "^2.38.0"
   }
