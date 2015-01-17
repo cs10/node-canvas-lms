@@ -36,8 +36,7 @@ Canvas.prototype._http = function(options, callback) {
     };
     options.json = true;
     return request(options, function(error, response, body) {
-        // TODO: Better error handling here.
-        return callback(body, response, error);
+        return callback(error, response, body);
     });
 };
 
