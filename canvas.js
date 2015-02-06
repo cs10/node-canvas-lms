@@ -35,6 +35,7 @@ Canvas.prototype._http = function(options, callback) {
         Authorization: 'Bearer ' + this.accessToken
     };
     options.json = true;
+    options.useQuerystring = true;
     return request(options, function(error, response, body) {
         return callback(error, response, body);
     });
