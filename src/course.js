@@ -1,5 +1,11 @@
 var Canvas = require('./canvas.js');
 
-module.exports = {
-    Course: Canvas
+
+function Course() {
+    return this
 }
+
+Course.prototype = Canvas.prototype;
+Course.super = Canvas;
+
+module.exports = Course;

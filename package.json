@@ -20,7 +20,7 @@
     "email": "cycomachead@gmail.com",
     "url": "https://github.com/cycomachead"
   },
-  "main": "./index.js",
+  "main": "./index.jsi",
   "dependencies": {
     "request": "^2.38.0"
   }
