@@ -1,7 +1,7 @@
 {
   "name": "node-canvas-lms",
   "description": "A simple callback based Canvas LMS API",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "keywords": [
     "api",
     "canvas"
@@ -20,7 +20,7 @@
     "email": "cycomachead@gmail.com",
     "url": "https://github.com/cycomachead"
   },
-  "main": "./index.jsi",
+  "main": "./index.js",
   "dependencies": {
     "request": "^2.38.0"
   }
