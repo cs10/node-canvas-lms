@@ -49,37 +49,35 @@ Canvas.prototype._buildApiUrl = function (endpoint) {
     return resolve(this.host,  '/api/' + this.apiVersion + endpoint);
 };
 
-Canvas.prototype._http = function (options, callback) {
+Canvas.prototype._http = function (options, cb) {
     options.headers = {
         Authorization: 'Bearer ' + this.accessToken
     };
     options.json = true;
     options.useQuerystring = true;
 
-    return request(options, function (error, response, body) {
-        return callback(error, response, body);
-    });
+    return request(options, cb);
 };
 
-Canvas.prototype.delete = function (endpoint, querystring) {
-    var options = {
-        method: 'DELETE',
-        url: this._buildApiUrl(endpoint),
-        qs: querystring
-    };
-    return this._http(options);
-};
+Canvas.prototype.get = function (endpoint, query, cb) {
+    if (typeof query == 'Function') {
+        cb = query;
+        query = {};
+    }
 
-Canvas.prototype.get = function (endpoint, querystring, callback) {
     var options = {
         method: 'GET',
         url: this._buildApiUrl(endpoint),
-        qs: querystring
+        qs: query
     };
-    return this._http(options, callback);
+    return this._http(options, cb);
 };
 
 Canvas.prototype.post = function (endpoint, querystring, form, callback) {
+    if (typeof querystring == 'Function') {
+        callback = querystring;
+        querystring = {};
+    }
     var options = {
         method: 'POST',
         url: this._buildApiUrl(endpoint),
@@ -90,6 +88,11 @@ Canvas.prototype.post = function (endpoint, querystring, form, callback) {
 };
 
 Canvas.prototype.put = function (endpoint, querystring, form, callback) {
+    if (typeof querystring == 'Function') {
+        callback = querystring;
+        querystring = {};
+    }
+
     var options = {
         method: 'PUT',
         url: this._buildApiUrl(endpoint),
@@ -99,6 +102,23 @@ Canvas.prototype.put = function (endpoint, querystring, form, callback) {
     return this._http(options, callback);
 };
 
+Canvas.prototype.delete = function (endpoint, querystring, callback) {
+    if (typeof querystring == 'Function') {
+        callback = querystring;
+        querystring = {};
+    }
+
+    var options = {
+        method: 'DELETE',
+        url: this._buildApiUrl(endpoint),
+        qs: querystring
+    };
+
+    return this._http(options, callback);
+};
+
+
+// TODO: don't use this function
 Canvas.prototype.getID = function (idType, id, callback) {
     var endpoint = 'users/' + (idType ? idType + ':' : '') + id + '/profile';
     return this.get(endpoint, '', function (body) {

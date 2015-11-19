@@ -1,4 +1,15 @@
+/** Course
+ *  A course is a Canvas instance that is designed to
+ */
+
 var Canvas = require('./canvas.js');
+
+
+// Course Inherits from a Canvas object.
+Course.prototype = Object.create(Canvas.prototype);
+Course.prototype.constructor = Course;
+Course.uber = Canvas.prototype;
+
 
 function Course(id, options, canvas) {
     if (!canvas) {
@@ -15,9 +26,9 @@ function Course(id, options, canvas) {
     // Copy Canvas obj params.
     // allows `this` to work correctly in Canvas functions.
     // TODO: Better OOP-y way of doing this?
-    this.accessToken = canvas.accessToken;
-    this.apiVersion = canvas.apiVersion;
-    this.host = canvas.host;
+    // this.accessToken = this.canvas.accessToken;
+    // this.apiVersion = this.canvas.apiVersion;
+    // this.host = this.canvas.host;
 
     this.studentIDType = '';
     if (this.options.studentIDType) {
@@ -32,15 +43,17 @@ function Course(id, options, canvas) {
     return this;
 }
 
-// Course Inherits from a Canvas object.
-Course.prototype = Object.create(Canvas.prototype);
-Course.prototype.constructor = Course;
-Course.uber = Canvas.prototype;
-
-Course.prototype.URL_BASE = '/courses/';
+Course.prototype.URL_BASE = 'courses/';
 
 Course.prototype._buildApiUrl = function (endpoint) {
-    return this.uber._buildApiUrl(`${this.URL_BASE}${this.id}/`);
+    return Course.uber._buildApiUrl.call(
+        this.canvas,
+        `${this.URL_BASE}${this.courseIDType}${this.id}/${endpoint}`);
+}
+
+Course.prototype._http = function (options, cb) {
+    console.log('Course http called...');
+    return Course.uber._http.call(this.canvas, options, cb);
 }
 
 // Add a function to a Canvas Object to create an instance of a Course
