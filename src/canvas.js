@@ -60,63 +60,77 @@ Canvas.prototype._http = function (options, cb) {
 };
 
 Canvas.prototype.get = function (endpoint, query, cb) {
+    var options, args;
+    args = defaultArguments(endpoint, query, cb);
+    options = {
+        method: 'GET',
+        url: this._buildApiUrl(args.endpoint),
+        qs: args.query
+    };
+    return this._http(options, args.cb);
+};
+
+Canvas.prototype.post = function (endpoint, query, form, cb) {
+    var options, args;
+    args = defaultArguments(endpoint, query, form, cb);
+    options = {
+        method: 'POST',
+        url: this._buildApiUrl(args.endpoint),
+        qs: args.query,
+        form: args.form
+    };
+    return this._http(options, args.cb);
+};
+
+Canvas.prototype.put = function (endpoint, query, form, cb) {
+    var args, options;
+    args = defaultArguments(endpoint, query, form, cb);
+    options = {
+        method: 'PUT',
+        url: this._buildApiUrl(args.endpoint),
+        qs: args.query,
+        form: args.form,
+    };
+    return this._http(options, args.cb);
+};
+
+Canvas.prototype.delete = function (endpoint, query, cb) {
+    var options, args;
+    args = defaultArguments(endpoint, query, cb);
+    options = {
+        method: 'DELETE',
+        url: this._buildApiUrl(args.endpoint),
+        qs: args.query
+    };
+
+    return this._http(options, args.cb);
+};
+
+function defaultArguments(endpoint, query, form, cb) {
+    // normalize based on whether form exists.
+    // in GET/DELETE "form" will be a callback if query is provided.
+    if (arguments.length == 3) {
+        cb = form;
+        form = null;
+    }
+
     if (typeof query == 'Function') {
         cb = query;
         query = {};
     }
 
-    var options = {
-        method: 'GET',
-        url: this._buildApiUrl(endpoint),
-        qs: query
-    };
-    return this._http(options, cb);
-};
-
-Canvas.prototype.post = function (endpoint, querystring, form, callback) {
-    if (typeof querystring == 'Function') {
-        callback = querystring;
-        querystring = {};
-    }
-    var options = {
-        method: 'POST',
-        url: this._buildApiUrl(endpoint),
-        qs: querystring,
-        form: form
-    };
-    return this._http(options, callback);
-};
-
-Canvas.prototype.put = function (endpoint, querystring, form, callback) {
-    if (typeof querystring == 'Function') {
-        callback = querystring;
-        querystring = {};
+    if (cb.length != 3) {
+        throw new CanvasError(func.name + ': callback function should have 3' +
+                    ' parameters, but had ' + cb.length + '.');
     }
 
-    var options = {
-        method: 'PUT',
-        url: this._buildApiUrl(endpoint),
-        qs: querystring,
+    return {
+        endpoint: endpoint,
+        query: query,
         form: form,
+        cb: cb
     };
-    return this._http(options, callback);
-};
-
-Canvas.prototype.delete = function (endpoint, querystring, callback) {
-    if (typeof querystring == 'Function') {
-        callback = querystring;
-        querystring = {};
-    }
-
-    var options = {
-        method: 'DELETE',
-        url: this._buildApiUrl(endpoint),
-        qs: querystring
-    };
-
-    return this._http(options, callback);
-};
-
+}
 
 // TODO: don't use this function
 Canvas.prototype.getID = function (idType, id, callback) {
