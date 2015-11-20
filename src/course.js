@@ -13,8 +13,8 @@ Course.uber = Canvas.prototype;
 
 function Course(id, options, canvas) {
     if (!canvas) {
-        // Shortcut: Use the options object to create a new Canvas object.
-        return new Course(id, options, new Canvas(options.host, options));
+        // Shortcut: Use the options object to create a new Canvas object
+        return new Canvas(options.host, options).Course(id, options);
     }
 
     this.options = options || {};
@@ -22,13 +22,6 @@ function Course(id, options, canvas) {
     this.id = id;
     this.canvas = canvas;
     this.name = this.canvas.name + ' Course ' + id || this.options.name;
-
-    // Copy Canvas obj params.
-    // allows `this` to work correctly in Canvas functions.
-    // TODO: Better OOP-y way of doing this?
-    // this.accessToken = this.canvas.accessToken;
-    // this.apiVersion = this.canvas.apiVersion;
-    // this.host = this.canvas.host;
 
     this.studentIDType = '';
     if (this.options.studentIDType) {
@@ -52,7 +45,6 @@ Course.prototype._buildApiUrl = function (endpoint) {
 }
 
 Course.prototype._http = function (options, cb) {
-    console.log('Course http called...');
     return Course.uber._http.call(this.canvas, options, cb);
 }
 
