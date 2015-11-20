@@ -44,8 +44,8 @@ Course.prototype._buildApiUrl = function (endpoint) {
         `${this.URL_BASE}${this.courseIDType}${this.id}/${endpoint}`);
 }
 
-Course.prototype._http = function (options, cb) {
-    return Course.uber._http.call(this.canvas, options, cb);
+Course.prototype._http = function (method, args) {
+    return Course.uber._http.call(this.canvas, method, args);
 }
 
 // Add a function to a Canvas Object to create an instance of a Course

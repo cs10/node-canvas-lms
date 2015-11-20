@@ -49,61 +49,40 @@ Canvas.prototype._buildApiUrl = function (endpoint) {
     return resolve(this.host,  '/api/' + this.apiVersion + endpoint);
 };
 
-Canvas.prototype._http = function (options, cb) {
-    options.headers = {
-        Authorization: 'Bearer ' + this.accessToken
-    };
-    options.json = true;
-    options.useQuerystring = true;
+Canvas.prototype._http = function (method, args) {
+    var options = {
+        method: method,
+        url: this._buildApiUrl(args.endpoint),
+        qs: args.query,
+        // Defaults:
+        headers: {
+            Authorization: 'Bearer ' + this.accessToken
+        },
+        json: true,
+        useQuerystring: true
+    }
 
+    //TODO: Can this be null on get requests?
+    if (args.form) {
+        options.form = args.form;
+    }
     return request(options, cb);
 };
 
 Canvas.prototype.get = function (endpoint, query, cb) {
-    var options, args;
-    args = defaultArguments(endpoint, query, cb);
-    options = {
-        method: 'GET',
-        url: this._buildApiUrl(args.endpoint),
-        qs: args.query
-    };
-    return this._http(options, args.cb);
+    return this._http('GET', defaultArguments(endpoint, query, cb));
 };
 
 Canvas.prototype.post = function (endpoint, query, form, cb) {
-    var options, args;
-    args = defaultArguments(endpoint, query, form, cb);
-    options = {
-        method: 'POST',
-        url: this._buildApiUrl(args.endpoint),
-        qs: args.query,
-        form: args.form
-    };
-    return this._http(options, args.cb);
+    return this._http('POST', defaultArguments(endpoint, query, form, cb));
 };
 
 Canvas.prototype.put = function (endpoint, query, form, cb) {
-    var args, options;
-    args = defaultArguments(endpoint, query, form, cb);
-    options = {
-        method: 'PUT',
-        url: this._buildApiUrl(args.endpoint),
-        qs: args.query,
-        form: args.form,
-    };
-    return this._http(options, args.cb);
+    return this._http('PUT', defaultArguments(endpoint, query, form, cb));
 };
 
 Canvas.prototype.delete = function (endpoint, query, cb) {
-    var options, args;
-    args = defaultArguments(endpoint, query, cb);
-    options = {
-        method: 'DELETE',
-        url: this._buildApiUrl(args.endpoint),
-        qs: args.query
-    };
-
-    return this._http(options, args.cb);
+    return this._http('DELETE', defaultArguments(endpoint, query, cb));
 };
 
 function defaultArguments(endpoint, query, form, cb) {
@@ -114,7 +93,7 @@ function defaultArguments(endpoint, query, form, cb) {
         form = null;
     }
 
-    if (typeof query == 'Function') {
+    if (typeof query == 'function') {
         cb = query;
         query = {};
     }
