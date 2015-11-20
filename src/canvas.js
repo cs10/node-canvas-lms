@@ -4,14 +4,6 @@ var request = require('request');
 var resolve = require('url').resolve;
 var format  = require('util').format;
 
-function CanvasError(args) {
-    var msg = format.apply(null, this.arguments);
-    return this.uber(msg);
-}
-
-CanvasError.prototype = Object.create(Error.prototype);
-CanvasError.uber = Error;
-
 function Canvas(host, options) {
     if (!host || typeof host != 'string') {
         throw new CanvasError('A Canvas instance requires a host');
@@ -30,17 +22,6 @@ function Canvas(host, options) {
     this.host = host;
 }
 
-function isHttpClientError(response) {
-    return (response.statusCode >= 400 && response.statusCode < 500);
-}
-
-function isHttpError(response) {
-    return (isHttpClientError(response) || isHttpServerError(response));
-}
-
-function isHttpServerError(response) {
-    return (response.statusCode >= 500 && response.statusCode < 600);
-}
 
 Canvas.prototype._buildApiUrl = function (endpoint) {
     if (endpoint.substring[0] != '/') {
@@ -69,6 +50,9 @@ Canvas.prototype._http = function (method, args) {
     return request(options, cb);
 };
 
+
+// Primitive HTTP methods.
+// These are just wrappers around _http with the proper method applied.
 Canvas.prototype.get = function (endpoint, query, cb) {
     return this._http('GET', defaultArguments(endpoint, query, cb));
 };
@@ -85,6 +69,17 @@ Canvas.prototype.delete = function (endpoint, query, cb) {
     return this._http('DELETE', defaultArguments(endpoint, query, cb));
 };
 
+// Error Handling
+function CanvasError(args) {
+    var msg = format.apply(null, this.arguments);
+    msg.name = 'Canvas Error'
+    return this.uber(msg);
+}
+
+CanvasError.prototype = Object.create(Error.prototype);
+CanvasError.uber = Error;
+
+// Utility Functions -- not exported
 function defaultArguments(endpoint, query, form, cb) {
     // normalize based on whether form exists.
     // in GET/DELETE "form" will be a callback if query is provided.
@@ -109,17 +104,6 @@ function defaultArguments(endpoint, query, form, cb) {
         form: form,
         cb: cb
     };
-}
-
-// TODO: don't use this function
-Canvas.prototype.getID = function (idType, id, callback) {
-    var endpoint = 'users/' + (idType ? idType + ':' : '') + id + '/profile';
-    return this.get(endpoint, '', function (body) {
-        if (body.errors) {
-            return callback(body.errors);
-        }
-        return callback(body.id);
-    });
 }
 
 module.exports = Canvas;
