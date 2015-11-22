@@ -1,8 +1,15 @@
+/** canvas.js
+ *      Desc. TODO
+ *
+ *  Author: Michael Ball
+ */
 'use strict';
 
-var request = require('request');
-var resolve = require('url').resolve;
+var url     = require('url');
 var format  = require('util').format;
+
+var request = require('request');
+
 
 function Canvas(host, options) {
     if (!host || typeof host != 'string') {
@@ -68,6 +75,23 @@ Canvas.prototype.put = function (endpoint, query, form, cb) {
 Canvas.prototype.delete = function (endpoint, query, cb) {
     return this._http('DELETE', defaultArguments(endpoint, query, cb));
 };
+
+// Canvas LMS Specific Methods
+Canvas.prototype.allPages = function (endpoint, query, cb, prevData) {
+    // TODO: verify that paginated content will always be arrayed.
+    var prevData = prevData || [];
+    this.get(endpoint, query, function(error, resp, body) {
+        var params = q;
+        if (error || body.errors) {
+            // TODO: body + prev data?
+            cb(error, resp, body);
+        }
+        if (resp.headers.next) {
+            this.allPages(endpoint, params, cb, prevData);
+        }
+    })
+};
+
 
 // Error Handling
 function CanvasError(args) {
