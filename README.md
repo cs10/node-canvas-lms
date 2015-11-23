@@ -2,6 +2,7 @@
 
 A very simple node.js wrapper for the Canvas LMS API
 
+
 ## Example Usage
 ```js
 var Canvas = require('node-canvas-lms');

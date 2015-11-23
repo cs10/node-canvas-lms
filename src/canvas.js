@@ -52,7 +52,7 @@ Canvas.prototype._http = function (method, args) {
     if (args.form) {
         options.form = args.form;
     }
-    return request(options, cb);
+    return request(options, args.cb);
 };
 
 
@@ -77,20 +77,25 @@ Canvas.prototype.delete = function (endpoint, query, cb) {
 // Canvas LMS Specific Methods
 Canvas.prototype.allPages = function (endpoint, query, cb, prevData) {
     // TODO: verify that paginated content will always be arrayed.
-    var prevData = prevData || [];
+    var prevData = prevData || [],
+        myself = this;
     this.get(endpoint, query, function(error, resp, body) {
-        var query = {};
+        var query = {}, linkHeaders;
         if (error || body.errors) {
             // TODO: body + prev data?
             cb(error, resp, body);
         }
-        if (resp.headers.next) {
-            query = url.parse(resp.headers.next).query;
-            this.allPages(endpoint, query, cb, prevData);
+        linkHeaders = parseLinkHeaders(resp.headers.link);
+        if (linkHeaders.next) {
+            // Note: this is throwing an error in some cases...
+            query = url.parse(linkHeaders.next).query;
+            myself.allPages(endpoint, query, cb, body + prevData);
+        } else {
+            // TODO: verify this concatentation works...
+            cb(error, resp, body + prevData);
         }
     });
 };
-
 
 // Error Handling
 function CanvasError(args) {
@@ -127,6 +132,37 @@ function defaultArguments(endpoint, query, form, cb) {
         form: form,
         cb: cb
     };
+}
+
+/** parseLinkHeaders - get an object from a canvas header string
+ *  Canvas returns link headers as a fat, annoying string:
+ *  <url>; rel="type",<url>; rel="type"...
+ *  See: https://bcourses.berkeley.edu/doc/api/file.pagination.html
+ *  @param {string} the link field from a request header
+ *  @return {object} a mapping of rel-value: url
+
+    // TODO: Use these to build an object
+    // could make it easier to check if a paramter exists?
+    allowedRel = [
+        'current',
+        'next',
+        'prev',
+        'first',
+        'last'
+    ];
+ */
+function parseLinkHeaders(linkStr) {
+    var formatRE, match, allowedRel, output = {};
+    formatRE = /<(.*?)>;\s+rel="(\w+)",?/gi;
+
+    match = formatRE.exec(linkStr);
+    while (match != null) {
+        if (match.length > 2) {
+            output[match[2]] = match[1];
+        }
+        match = formatRE.exec(linkStr);
+    }
+    return output;
 }
 
 module.exports = Canvas;

@@ -1,5 +1,5 @@
 {
-  "name": "canvas-lms",
+  "name": "node-canvas-lms",
   "description": "A simple callback based Canvas LMS API",
   "version": "0.1.0",
   "keywords": [
