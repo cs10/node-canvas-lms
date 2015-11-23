@@ -11,20 +11,34 @@ var format  = require('util').format;
 var request = require('request');
 
 
-function Canvas(host, options) {
-    if (!host || typeof host != 'string') {
-        throw new CanvasError('A Canvas instance requires a host');
+function Canvas(host, token, options) {
+    options = options || {};
+
+    // Handle Default arguments.
+    if (typeof host == 'object') {
+        options = host;
+        host = options.host;
+        token = options.token;
+    } else if (typeof token == 'object') {
+        options = token;
+        token = options.token;
+    }
+
+    if (!host) {
+        throw new CanvasError('A Canvas instance requires a host',
+            `Expected a URL but found ${host}.`);
     }
 
     if (host.indexOf('https') != 0) {
-        throw new CanvasError('Hosts must be https://');
+        throw new CanvasError(`Hosts must use https://, found ${host}`);
     }
 
-    options = options || {};
+
     this.name = 'canvas' || options.name;
-    this.accessToken = options.accessToken || options.token || '';
-    this.apiVersion = options.apiVersion || options.version || 'v1';
+    this.accessToken = options.token || '';
+    this.apiVersion = options.version || 'v1';
     this.host = host;
+    this.options = options;
 }
 
 

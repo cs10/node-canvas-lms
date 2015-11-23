@@ -1,22 +1,34 @@
 # node-canvas-lms
 
-A very simple node.js wrapper for the Canvas LMS API
+A very simple node.js wrapper for the [Canvas LMS][canvas] [API][api-docs]
 
+[canvas]: http://github.com/instructure/canvas-lms/
+[api-docs]: https://canvas.instructure.com/doc/api/
 
 ## Example Usage
+
+The only required parameter is `host`, but in most cases, you'll also want an auth token to do anything useful.
+
 ```js
 var Canvas = require('node-canvas-lms');
 
-var lms = new Canvas('YOUR-HOST', { token: 'YOUR-TOKEN' });
+var lms = new Canvas({
+	host: 'https://canvas.instructure.com',
+	token: 'YOUR-TOKEN',
+	name: ' (Optional) My Awesome Canvas Site'
+});
 
+// OR
+var lms = new Canvas('https://canvas.instructure.com', 'YOUR-TOKEN', options);
 ```
 
 The `Cavnas` object is a very simple API wrapper based around [requests][requests], designed to allow easier access. There's two basics:
 
 * Options: Pass an `options` object when creating a Canvas instance. There are currently a few parameters, but only `token` is required.
 	* `token`: an auth token to access your Canvas instance. [See these docs.][canvas-token]
-	* `apiVersion`: This defaults to `"v1"`, which is currently the only version of the Canvas LMS API. However, if versions change, the support is there.
+	* `version`: This defaults to `"v1"`, which is currently the only version of the Canvas LMS API. However, if versions change, the support is there.
 	* `name`: is an optional name for the Canvas instance. It's useful for debugging if you have lots of different instances.
+	* TODO: - headers, ID formats
 
 [requests]: http://todo
 [canvas-docs]: http://todo
@@ -55,6 +67,7 @@ A `Canvas` object has 4 main functions: `get`, `post`, `put`, `delete`.
 	* Note that `body` will be parsed and return a native JS object, rather than a JSON string.
 * `form`: For `put` and `post` requests, a `form` parameter is usually expected. This us a URL-form-encoded parameter. TODO: reference canvas docs...
 
+[request-cb]: http://
 #### Shorthand
 All functions support a shorthand format, where `query` and `form` are empty. In that case the method signatures look like this:
 
@@ -66,3 +79,6 @@ All functions support a shorthand format, where `query` and `form` are empty. In
 ## Course Objects
 
 ## FUTURE
+
+### Requirements
+Note that this version requires Node.js 4.2.x or greater due to reliance on ES6 features. To use an older version of node, please use the `v0.0.7` tag.
