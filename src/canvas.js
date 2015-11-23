@@ -17,9 +17,7 @@ function Canvas(host, options) {
     }
 
     if (host.indexOf('https') != 0) {
-        throw new CanvasError(
-            'Hosts must be https://'
-        )
+        throw new CanvasError('Hosts must be https://');
     }
 
     options = options || {};
@@ -88,7 +86,7 @@ Canvas.prototype.allPages = function (endpoint, query, cb, prevData) {
         }
         if (resp.headers.next) {
             query = url.parse(resp.headers.next).query;
-            this.allPages(endpoint, query cb, prevData);
+            this.allPages(endpoint, query, cb, prevData);
         }
     });
 };
