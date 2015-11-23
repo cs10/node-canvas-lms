@@ -34,7 +34,7 @@ Canvas.prototype._buildApiUrl = function (endpoint) {
     if (endpoint.substring[0] != '/') {
         endpoint = '/' + endpoint;
     }
-    return resolve(this.host,  '/api/' + this.apiVersion + endpoint);
+    return url.resolve(this.host,  '/api/' + this.apiVersion + endpoint);
 };
 
 Canvas.prototype._http = function (method, args) {
@@ -81,15 +81,16 @@ Canvas.prototype.allPages = function (endpoint, query, cb, prevData) {
     // TODO: verify that paginated content will always be arrayed.
     var prevData = prevData || [];
     this.get(endpoint, query, function(error, resp, body) {
-        var params = q;
+        var query = {};
         if (error || body.errors) {
             // TODO: body + prev data?
             cb(error, resp, body);
         }
         if (resp.headers.next) {
-            this.allPages(endpoint, params, cb, prevData);
+            query = url.parse(resp.headers.next).query;
+            this.allPages(endpoint, query cb, prevData);
         }
-    })
+    });
 };
 
 
