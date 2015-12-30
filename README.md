@@ -1,11 +1,11 @@
-# node-canvas-lms
+# canvas-lms
 
-A very simple node.js wrapper for the [Canvas LMS][canvas] [API][api-docs]
+A simple node.js wrapper for the [Canvas LMS][canvas] [API][api-docs], with some sugar!
 
 [canvas]: http://github.com/instructure/canvas-lms/
 [api-docs]: https://canvas.instructure.com/doc/api/
 
-## Example Usage
+## Quick Overview
 
 The only required parameter is `host`, but in most cases, you'll also want an auth token to do anything useful.
 
@@ -81,4 +81,4 @@ All functions support a shorthand format, where `query` and `form` are empty. In
 ## FUTURE
 
 ### Requirements
-Note that this version requires Node.js 4.2.x or greater due to reliance on ES6 features. To use an older version of node, please use the `v0.0.7` tag.
+`canvas-lms` makes use of ES6, so please use Node.js 4.2.x or newer. To use an older version of node, please use the `v0.0.7` tag. 4.2 has LTS so, this hopefully isn't a terrible restriction!

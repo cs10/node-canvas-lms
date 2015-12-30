@@ -11,48 +11,50 @@ var format  = require('util').format;
 var request = require('request');
 
 
-function Canvas(host, token, options) {
+function Canvas(host, options) {
+    var token;
     options = options || {};
 
     // Handle Default arguments.
     if (typeof host === 'object') {
         options = host;
         host = options.host;
-        token = options.token;
-    } else if (typeof token === 'object') {
-        options = token;
-        token = options.token;
     }
+    token = options.token;
 
     if (!host) {
         throw new CanvasError('A Canvas instance requires a host',
             `Expected a URL but found ${host}.`);
     }
 
-    if (host.indexOf('https') != 0) {
+    if (host.indexOf('https') !== 0) {
         throw new CanvasError(`Hosts must use https://, found ${host}`);
     }
 
 
     this.name = 'canvas' || options.name;
     this.accessToken = options.token || '';
-    this.apiVersion = options.version || 'v1';
+    this.apiVersion = this.normalizeVersion(options.version) || 'v1';
     this.host = host;
     this.options = options;
 }
 
+/*
+    Make sure the version matches the 'vN' format.
+*/
+Canvas.prototype.normalizeVersion = function (version) {
+    return version;
+}
 
-Canvas.prototype._buildApiUrl = function (endpoint) {
-    if (endpoint.substring[0] !== '/') {
-        endpoint = '/' + endpoint;
-    }
-    return url.resolve(this.host,  '/api/' + this.apiVersion + endpoint);
+Canvas.prototype.resloveURL = function (endpoint) {
+    endpoint = endpoint.startsWith('/') ? '' : '/' + endpoint;
+    return url.resolve(this.host, `/api/${this.apiVersion}${endpoint}`);
 };
 
 Canvas.prototype._http = function (method, args) {
     var options = {
         method: method,
-        url: this._buildApiUrl(args.endpoint),
+        url: this.resloveURL(args.endpoint),
         qs: args.query,
         // Defaults:
         headers: {

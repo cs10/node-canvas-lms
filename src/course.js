@@ -1,6 +1,7 @@
 /** Course
  *  A course is a Canvas instance that is designed to
  */
+var url = require('url');
 
 var Canvas = require('./canvas.js');
 
@@ -20,9 +21,13 @@ function Course(id, options, canvas) {
     this.options = options || {};
 
     this.id = id;
-    this.canvas = canvas;
-    this.name = this.canvas.name + ' Course ' + id || this.options.name;
+    this.parent = canvas;
+    this.name = this.options.name || this.parent.name + ' Course ' + id;
+    
+    // FIXME -- duplication shouldn't be necessary?
+    //this.accessToken = this.parent.accessToken;
 
+    // FUTURE: Ensure these match a valid canvas format?
     this.studentIDType = '';
     if (this.options.studentIDType) {
         this.studentIDType = this.options.studentIDType + ':';
@@ -36,16 +41,18 @@ function Course(id, options, canvas) {
     return this;
 }
 
-Course.prototype.URL_BASE = 'courses/';
+Course.prototype.COURSE_URL = 'courses';
 
-Course.prototype._buildApiUrl = function (endpoint) {
-    return Course.uber._buildApiUrl.call(
-        this.canvas,
-        `${this.URL_BASE}${this.courseIDType}${this.id}/${endpoint}`);
-}
-
-Course.prototype._http = function (method, args) {
-    return Course.uber._http.call(this.canvas, method, args);
+Course.prototype.resloveURL = function (endpoint) {
+    var prefix;
+    
+    prefix = `${this.COURSE_URL}/${this.courseIDType}${this.id}`
+    prefix += endpoint.startsWith('/') ? '' : '/';
+    
+    return url.resolve(
+        this.parent.host,
+        `/api/${this.parent.apiVersion}/${prefix}${endpoint}`
+    );
 }
 
 // Add a function to a Canvas Object to create an instance of a Course
