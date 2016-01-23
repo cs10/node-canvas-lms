@@ -10,7 +10,7 @@ A simple node.js wrapper for the [Canvas LMS][canvas] [API][api-docs], with some
 The only required parameter is `host`, but in most cases, you'll also want an auth token to do anything useful.
 
 ```js
-var Canvas = require('node-canvas-lms');
+var Canvas = require('canvas-lms');
 
 var lms = new Canvas({
 	host: 'https://canvas.instructure.com',
@@ -67,7 +67,8 @@ A `Canvas` object has 4 main functions: `get`, `post`, `put`, `delete`.
 	* Note that `body` will be parsed and return a native JS object, rather than a JSON string.
 * `form`: For `put` and `post` requests, a `form` parameter is usually expected. This us a URL-form-encoded parameter. TODO: reference canvas docs...
 
-[request-cb]: http://
+[request-cb]: https://github.com/request/request#super-simple-to-use
+
 #### Shorthand
 All functions support a shorthand format, where `query` and `form` are empty. In that case the method signatures look like this:
 
@@ -81,4 +82,12 @@ All functions support a shorthand format, where `query` and `form` are empty. In
 ## FUTURE
 
 ### Requirements
-`canvas-lms` makes use of ES6, so please use Node.js 4.2.x or newer. To use an older version of node, please use the `v0.0.7` tag. 4.2 has LTS so, this hopefully isn't a terrible restriction!
+`canvas-lms` makes use of ES6, so please use Node.js 4.2.x or newer. To use an older version of node, please use the `v0.0.7` tag. 4.2 has LTS; this hopefully isn't a terrible restriction!
+
+
+## Development
+
+The master branch tracks the stable version, which is published to npm. Development occurs on the [dev branch][dev]. Currently This is going through a pretty big update, so be sure to check that out.
+
+[dev]: https://github.com/cs10/node-canvas-lms/tree/dev
+
