@@ -47,8 +47,8 @@ Canvas.prototype.normalizeVersion = function (version) {
 }
 
 Canvas.prototype.resloveURL = function (endpoint) {
-    endpoint = endpoint.startsWith('/') ? '' : '/' + endpoint;
-    return url.resolve(this.host, `/api/${this.apiVersion}${endpoint}`);
+    var slash = (endpoint.startsWith('/') ? '' : '/';
+    return `${this.host}/api/${this.apiVersion + slash + endpoint}`;
 };
 
 Canvas.prototype._http = function (method, args) {
@@ -74,6 +74,7 @@ Canvas.prototype._http = function (method, args) {
 // Primitive HTTP methods.
 // These are just wrappers around _http with the proper method applied.
 Canvas.prototype.get = function (endpoint, query, cb) {
+    console.log('GET ENDPT: ', endpoint);
     return this._http('GET', defaultArguments(endpoint, query, cb));
 };
 
