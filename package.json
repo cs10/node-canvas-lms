@@ -1,7 +1,7 @@
 {
   "name": "node-canvas-lms",
   "description": "A simple callback based Canvas LMS API",
-  "version": "0.0.7",
+  "version": "0.0.7-1",
   "keywords": [
     "api",
     "canvas"
