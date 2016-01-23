@@ -25,7 +25,7 @@ function Course(id, options, canvas) {
     this.name = this.options.name || this.parent.name + ' Course ' + id;
     
     // FIXME -- duplication shouldn't be necessary?
-    //this.accessToken = this.parent.accessToken;
+    this.accessToken = this.parent.accessToken;
 
     // FUTURE: Ensure these match a valid canvas format?
     this.studentIDType = '';

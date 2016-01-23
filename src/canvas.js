@@ -56,7 +56,6 @@ Canvas.prototype._http = function (method, args) {
         method: method,
         url: this.resloveURL(args.endpoint),
         qs: args.query,
-        // Defaults:
         headers: {
             Authorization: 'Bearer ' + this.accessToken
         },
