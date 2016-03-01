@@ -26,6 +26,7 @@
   },
   "main": "./index.js",
   "dependencies": {
+    "fuzzy": "^0.1.1",
     "request": "^2.38.0"
   },
   "engineStrict": true,

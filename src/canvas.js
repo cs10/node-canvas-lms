@@ -9,7 +9,7 @@ var url     = require('url');
 var format  = require('util').format;
 
 var request = require('request');
-
+var fuzzy   = require('fuzzy');
 
 function Canvas(host, options) {
     var token;
@@ -27,11 +27,6 @@ function Canvas(host, options) {
             `Expected a URL but found ${host}.`);
     }
 
-    if (host.indexOf('https') !== 0) {
-        throw new CanvasError(`Hosts must use https://, found ${host}`);
-    }
-
-
     this.name = 'canvas' || options.name;
     this.accessToken = options.token || '';
     this.apiVersion = this.normalizeVersion(options.version) || 'v1';
@@ -47,7 +42,7 @@ Canvas.prototype.normalizeVersion = function (version) {
 }
 
 Canvas.prototype.resloveURL = function (endpoint) {
-    var slash = (endpoint.startsWith('/') ? '' : '/';
+    var slash = endpoint.startsWith('/') ? '' : '/';
     return `${this.host}/api/${this.apiVersion + slash + endpoint}`;
 };
 
@@ -74,7 +69,6 @@ Canvas.prototype._http = function (method, args) {
 // Primitive HTTP methods.
 // These are just wrappers around _http with the proper method applied.
 Canvas.prototype.get = function (endpoint, query, cb) {
-    console.log('GET ENDPT: ', endpoint);
     return this._http('GET', defaultArguments(endpoint, query, cb));
 };
 
@@ -89,6 +83,22 @@ Canvas.prototype.put = function (endpoint, query, form, cb) {
 Canvas.prototype.delete = function (endpoint, query, cb) {
     return this._http('DELETE', defaultArguments(endpoint, query, cb));
 };
+
+// TODO: Fix this.
+Canvas.prototype.getFuzzy = function (searchStr, endpoint, query, cb) {
+    function fuzzySearcher(err, resp, body) {
+        var matches;
+        if (err || resp.statusCode >= 300 || !body || body.errors) {
+            throw new CanvasError('Uh oh! Fuzzy Searching Borked.');
+        }
+        
+        return fuzzy
+                .filter(searchStr, body, extractor)
+                // fuzzy returns complex objects, we just want 'x.original'
+                .map(function (x) { return x.original });
+    }
+    return this.allPages(ndpoint, query, fuzzySearcher);
+}
 
 // Canvas LMS Specific Methods
 Canvas.prototype.allPages = function (endpoint, query, cb, prevData) {
