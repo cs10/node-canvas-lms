@@ -147,8 +147,8 @@ function defaultArguments(endpoint, query, form, cb) {
         query = {};
     }
 
-    if (cb.length !== 3) {
-        throw new CanvasError(func.name + ': callback function should have 3' +
+    if (cb.length !== 3 && cb.length !== 0) {
+        throw new CanvasError(cb.name + ': callback function should have 3' +
                     ' parameters, but had ' + cb.length + '.');
     }
 
