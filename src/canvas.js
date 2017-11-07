@@ -41,13 +41,13 @@ Canvas.prototype._http = function(options, callback) {
     });
 };
 
-Canvas.prototype.delete = function(endpoint, querystring) {
+Canvas.prototype.delete = function(endpoint, querystring, callback) {
     var options = {
         method: 'DELETE',
         url: this._buildApiUrl(endpoint),
         qs: querystring
     };
-    return this._http(options);
+    return this._http(options, callback);
 };
 
 Canvas.prototype.get = function(endpoint, querystring, callback) {
